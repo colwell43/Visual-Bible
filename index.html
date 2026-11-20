@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Visual Bible Project</title>
+<meta name="description" content="The Visual Bible Project: each book of the Bible in the World English Bible, with photographs and questions that link life and Scripture.">
+<meta name="theme-color" content="#0F6B70">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F7F8F6; --surface: #FFFFFF; --ink: #15191C; --muted: #5A646A; --line: #D9DFDD;
+    --teal: #0F6B70; --teal-soft: #E3EFEE; --panel: #EDF1EF; --band: rgba(9, 15, 17, 0.58);
+    --display: "Libre Franklin", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #111517; --surface: #171C1E; --ink: #E5E9E7; --muted: #9CA7AB; --line: #2B3336;
+      --teal: #63BFC2; --teal-soft: #17292B; --panel: #1A2123; --band: rgba(5, 8, 9, 0.62);
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 18px; line-height: 1.55; }
+  a { color: var(--teal); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+  /* top bar */
+  .top { border-bottom: 1px solid var(--line); background: var(--surface); }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  .brand { font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
+  .brand span { color: var(--teal); }
+  .top a.site { font-family: var(--display); font-size: 14px; color: var(--muted); text-decoration: none; }
+  .top a.site:hover { color: var(--teal); }
+
+  /* intro */
+  header.hero { padding: 56px 0 28px; }
+  .eyebrow { font-family: var(--display); font-weight: 600; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--teal); margin: 0 0 10px; }
+  h1 { font-family: var(--display); font-weight: 700; font-size: clamp(34px, 6vw, 56px); line-height: 1.05; letter-spacing: -.02em; margin: 0 0 16px; }
+  .lede { max-width: 720px; color: var(--muted); font-size: 19px; margin: 0 0 22px; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .stats { display: flex; flex-wrap: wrap; gap: 22px; font-family: var(--display); font-size: 14px; color: var(--muted); margin: 0; }
+  .stats b { color: var(--ink); font-size: 18px; margin-right: 4px; }
+
+  /* tools */
+  .tools { position: sticky; top: 0; z-index: 5; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .tools .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 12px; padding-bottom: 12px; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface); }
+  .seg button { font-family: var(--display); font-size: 14px; font-weight: 500; border: 0; background: transparent; color: var(--muted); padding: 8px 16px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--teal); color: #fff; }
+  .search { flex: 1 1 220px; max-width: 360px; position: relative; }
+  .search input { width: 100%; font-family: var(--display); font-size: 15px; padding: 9px 14px 9px 36px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); }
+  .search input:focus { outline: 2px solid var(--teal); outline-offset: 1px; }
+  .search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); }
+  .jump { display: flex; gap: 6px; font-family: var(--display); font-size: 14px; }
+  .jump a { text-decoration: none; padding: 6px 10px; border-radius: 6px; color: var(--muted); }
+  .jump a:hover { background: var(--panel); color: var(--teal); }
+
+  /* sections */
+  main { padding: 10px 0 60px; }
+  .testament { margin-top: 34px; scroll-margin-top: 80px; }
+  .testament > h2 { font-family: var(--display); font-weight: 700; font-size: 26px; margin: 0 0 4px; }
+  .testament > p { margin: 0; color: var(--muted); font-size: 16px; }
+  .group { margin-top: 24px; }
+  .group h3 { font-family: var(--display); font-weight: 600; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 14px; }
+
+  /* cards */
+  .card { position: relative; display: block; border-radius: 10px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); text-decoration: none; color: inherit; aspect-ratio: 4 / 5; }
+  .card.live { border-color: transparent; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 6px 18px rgba(0,0,0,.08); transition: transform .15s ease, box-shadow .15s ease; }
+  .card.live:hover, .card.live:focus-visible { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(0,0,0,.1), 0 12px 28px rgba(0,0,0,.14); }
+  .card.live:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+  .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .card .fallback { position: absolute; inset: 0; background: linear-gradient(160deg, #2c6f6f, #0f3f44); }
+  .card .band { position: absolute; left: 0; right: 0; bottom: 0; background: var(--band); color: #fff; padding: 12px 14px 14px; }
+  .card .band small { display: block; font-family: var(--display); font-weight: 600; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; opacity: .9; }
+  .card .band strong { display: block; font-family: var(--display); font-weight: 700; font-size: 22px; line-height: 1.15; margin-top: 2px; }
+  .card .band span { display: block; font-family: var(--display); font-size: 12px; opacity: .85; margin-top: 4px; }
+  .card .badge { position: absolute; top: 10px; left: 10px; font-family: var(--display); font-weight: 600; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; background: #fff; color: #0F6B70; padding: 4px 8px; border-radius: 999px; }
+  .card.soon { display: flex; flex-direction: column; justify-content: flex-end; padding: 34px 14px 14px; background: var(--panel); border-style: dashed; aspect-ratio: auto; min-height: 104px; }
+  .card.soon strong { font-family: var(--display); font-weight: 600; font-size: 19px; line-height: 1.2; color: var(--ink); }
+  .card.soon span { font-family: var(--display); font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .card.soon em { position: absolute; top: 12px; left: 14px; font-style: normal; font-family: var(--display); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .empty { display: none; color: var(--muted); font-family: var(--display); padding: 30px 0; }
+
+  /* about */
+  .about { border-top: 1px solid var(--line); margin-top: 48px; padding-top: 28px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; }
+  .about h2 { font-family: var(--display); font-size: 20px; margin: 0 0 8px; }
+  .about p { margin: 0 0 12px; font-size: 17px; }
+  .about .hha { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .about .hha li { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 16px; }
+  .about .hha b { font-family: var(--display); font-size: 12px; letter-spacing: .14em; color: var(--teal); display: block; }
+  footer { border-top: 1px solid var(--line); padding: 22px 0 40px; font-family: var(--display); font-size: 13px; color: var(--muted); }
+  footer p { margin: 4px 0; }
+  @media (max-width: 760px) {
+    body { font-size: 17px; }
+    header.hero { padding: 36px 0 20px; }
+    .about { grid-template-columns: 1fr; }
+    .jump { display: none; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+    .card .band strong { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap">
+  <a class="brand" href="#">Visual <span>Bible Project</span></a>
+  <a class="site" href="https://www.ralphennis.com">ralphennis.com</a>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <p class="eyebrow">Linking life and Scripture through images</p>
+  <h1>The Visual Bible Project</h1>
+  <p class="lede">Each book of the Bible, in the <b>World English Bible</b>, set beside photographs and questions for
+    reflection. Choose a book to open it. Every Visual book works on a phone, tablet or computer, and can be added to
+    your home screen to read offline.</p>
+  <p class="stats" id="stats"></p>
+</div></header>
+
+<div class="tools"><div class="wrap">
+  <div class="seg" role="group" aria-label="Show books">
+    <button type="button" data-show="live" aria-pressed="true">Available now</button>
+    <button type="button" data-show="all" aria-pressed="false">All 66 books</button>
+  </div>
+  <label class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input type="search" id="q" placeholder="Find a book" aria-label="Find a book" autocomplete="off">
+  </label>
+  <nav class="jump" aria-label="Jump to">
+    <a href="#ot">Old Testament</a><a href="#nt">New Testament</a>
+  </nav>
+</div></div>
+
+<main><div class="wrap" id="books">
+  <noscript><p>Please turn on JavaScript to see the list of books.</p></noscript>
+</div>
+<div class="wrap"><p class="empty" id="empty">No books match your search.</p></div>
+
+<div class="wrap">
+  <section class="about" aria-labelledby="about-h">
+    <div>
+      <h2 id="about-h">About the Visual Bible Project</h2>
+      <p>Each Visual book contains the full text of one book of the Bible, with photographs from everyday life chosen to
+        help you connect your own story with God’s story. The photographs are not pictures of Bible scenes; they are
+        windows for reflection.</p>
+      <p>Each chapter opens with a short prayer and closes with Master Questions. At the end of each book, a Summary reviews
+        the whole book and Going Deeper offers a short study guide with free online resources. You can write your responses
+        and highlight the text, and everything you write stays on your own device.</p>
+    </div>
+    <ul class="hha">
+      <li><b>HEAD</b>Understand what the passage says and what it meant to its first readers.</li>
+      <li><b>HEART</b>Notice your feelings and attitudes before God, and what the passage shows about who He is.</li>
+      <li><b>ACTION</b>Decide what you will do in response.</li>
+    </ul>
+  </section>
+</div>
+</main>
+
+<footer><div class="wrap">
+  <p>Prepared by Ralph C. Ennis, <a href="https://www.ralphennis.com">www.ralphennis.com</a>, using artificial intelligence.</p>
+  <p>Scripture: World English Bible (public domain). Photographs: Pixabay.</p>
+</div></footer>
+
+<script>
+/* ------------------------------------------------------------------
+   TO ADD A BOOK: find it below and put its web address in "url",
+   for example  url: "https://genesis.ralphennis.com/"
+   Leave url empty ("") for books that are not posted yet.
+   ------------------------------------------------------------------ */
+var BIBLE = [
+  { testament: "Old Testament", id: "ot", note: "39 books, from Genesis to Malachi", groups: [
+    { name: "The Law", books: [
+      { name: "Genesis", ch: 50, url: "" },
+      { name: "Exodus", ch: 40, url: "" },
+      { name: "Leviticus", ch: 27, url: "" },
+      { name: "Numbers", ch: 36, url: "" },
+      { name: "Deuteronomy", ch: 34, url: "" } ] },
+    { name: "History", books: [
+      { name: "Joshua", ch: 24, url: "" },
+      { name: "Judges", ch: 21, url: "" },
+      { name: "Ruth", ch: 4, url: "" },
+      { name: "1 Samuel", ch: 31, url: "" },
+      { name: "2 Samuel", ch: 24, url: "" },
+      { name: "1 Kings", ch: 22, url: "" },
+      { name: "2 Kings", ch: 25, url: "" },
+      { name: "1 Chronicles", ch: 29, url: "" },
+      { name: "2 Chronicles", ch: 36, url: "" },
+      { name: "Ezra", ch: 10, url: "" },
+      { name: "Nehemiah", ch: 13, url: "" },
+      { name: "Esther", ch: 10, url: "" } ] },
+    { name: "Poetry and Wisdom", books: [
+      { name: "Job", ch: 42, url: "" },
+      { name: "Psalms", ch: 150, url: "" },
+      { name: "Proverbs", ch: 31, url: "" },
+      { name: "Ecclesiastes", ch: 12, url: "" },
+      { name: "Song of Solomon", ch: 8, url: "" } ] },
+    { name: "Major Prophets", books: [
+      { name: "Isaiah", ch: 66, url: "" },
+      { name: "Jeremiah", ch: 52, url: "" },
+      { name: "Lamentations", ch: 5, url: "" },
+      { name: "Ezekiel", ch: 48, url: "" },
+      { name: "Daniel", ch: 12, url: "" } ] },
+    { name: "Minor Prophets", books: [
+      { name: "Hosea", ch: 14, url: "" },
+      { name: "Joel", ch: 3, url: "" },
+      { name: "Amos", ch: 9, url: "" },
+      { name: "Obadiah", ch: 1, url: "" },
+      { name: "Jonah", ch: 4, url: "" },
+      { name: "Micah", ch: 7, url: "" },
+      { name: "Nahum", ch: 3, url: "" },
+      { name: "Habakkuk", ch: 3, url: "" },
+      { name: "Zephaniah", ch: 3, url: "" },
+      { name: "Haggai", ch: 2, url: "" },
+      { name: "Zechariah", ch: 14, url: "" },
+      { name: "Malachi", ch: 4, url: "" } ] } ] },
+  { testament: "New Testament", id: "nt", note: "27 books, from Matthew to Revelation", groups: [
+    { name: "The Gospels", books: [
+      { name: "Matthew", ch: 28, url: "" },
+      { name: "Mark", ch: 16, url: "https://mark.ralphennis.com/" },
+      { name: "Luke", ch: 24, url: "https://luke.ralphennis.com/" },
+      { name: "John", ch: 21, url: "" } ] },
+    { name: "History", books: [
+      { name: "Acts", ch: 28, url: "" } ] },
+    { name: "Paul’s Letters", books: [
+      { name: "Romans", ch: 16, url: "" },
+      { name: "1 Corinthians", ch: 16, url: "" },
+      { name: "2 Corinthians", ch: 13, url: "" },
+      { name: "Galatians", ch: 6, url: "" },
+      { name: "Ephesians", ch: 6, url: "" },
+      { name: "Philippians", ch: 4, url: "" },
+      { name: "Colossians", ch: 4, url: "" },
+      { name: "1 Thessalonians", ch: 5, url: "" },
+      { name: "2 Thessalonians", ch: 3, url: "" },
+      { name: "1 Timothy", ch: 6, url: "" },
+      { name: "2 Timothy", ch: 4, url: "" },
+      { name: "Titus", ch: 3, url: "" },
+      { name: "Philemon", ch: 1, url: "" } ] },
+    { name: "General Letters", books: [
+      { name: "Hebrews", ch: 13, url: "" },
+      { name: "James", ch: 5, url: "" },
+      { name: "1 Peter", ch: 5, url: "" },
+      { name: "2 Peter", ch: 3, url: "" },
+      { name: "1 John", ch: 5, url: "" },
+      { name: "2 John", ch: 1, url: "" },
+      { name: "3 John", ch: 1, url: "" },
+      { name: "Jude", ch: 1, url: "" } ] },
+    { name: "Prophecy", books: [
+      { name: "Revelation", ch: 22, url: "" } ] } ] }
+];
+
+(function () {
+  var books = document.getElementById("books"), empty = document.getElementById("empty");
+  var q = document.getElementById("q"), show = "live";
+  var all = [];
+  BIBLE.forEach(function (t) { t.groups.forEach(function (g) { g.books.forEach(function (b) { all.push(b); }); }); });
+  var live = all.filter(function (b) { return b.url; }).length;
+  if (!live) show = "all";
+  document.getElementById("stats").innerHTML =
+    "<span><b>" + live + "</b>" + (live === 1 ? "book" : "books") + " available now</span>" +
+    "<span><b>" + (all.length - live) + "</b>more coming</span><span><b>66</b>books in all</span>";
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function chapters(n) { return n + (n === 1 ? " chapter" : " chapters"); }
+  function card(b) {
+    if (b.url) {
+      var u = b.url.replace(/\/?$/, "/");
+      return '<a class="card live" href="' + esc(u) + '" aria-label="Open Visual ' + esc(b.name) + '">' +
+        '<div class="fallback"></div>' +
+        '<img src="' + esc(u) + 'img/cover.jpg" alt="" loading="lazy" onerror="this.remove()">' +
+        '<span class="badge">Open</span>' +
+        '<div class="band"><small>Visual</small><strong>' + esc(b.name) + '</strong><span>' + chapters(b.ch) + '</span></div></a>';
+    }
+    return '<div class="card soon" aria-label="Visual ' + esc(b.name) + ', coming soon"><em>Coming soon</em>' +
+      '<strong>' + esc(b.name) + '</strong><span>' + chapters(b.ch) + '</span></div>';
+  }
+  function render() {
+    var term = q.value.trim().toLowerCase(), html = "", shown = 0;
+    BIBLE.forEach(function (t) {
+      var part = "";
+      t.groups.forEach(function (g) {
+        var list = g.books.filter(function (b) {
+          return (show === "all" || b.url) && (!term || b.name.toLowerCase().indexOf(term) !== -1);
+        });
+        if (!list.length) return;
+        shown += list.length;
+        part += '<div class="group"><h3>' + esc(g.name) + '</h3><div class="grid">' + list.map(card).join("") + "</div></div>";
+      });
+      if (part) html += '<section class="testament" id="' + t.id + '"><h2>' + t.testament + "</h2><p>" + t.note + "</p>" + part + "</section>";
+    });
+    books.innerHTML = html;
+    empty.style.display = shown ? "none" : "block";
+  }
+  var buttons = document.querySelectorAll(".seg button");
+  Array.prototype.forEach.call(buttons, function (btn) {
+    btn.setAttribute("aria-pressed", btn.getAttribute("data-show") === show ? "true" : "false");
+    btn.addEventListener("click", function () {
+      show = btn.getAttribute("data-show");
+      Array.prototype.forEach.call(buttons, function (b) { b.setAttribute("aria-pressed", b === btn ? "true" : "false"); });
+      render();
+    });
+  });
+  q.addEventListener("input", function () {
+    if (q.value.trim() && show === "live" && !all.some(function (b) { return b.url && b.name.toLowerCase().indexOf(q.value.trim().toLowerCase()) !== -1; })) {
+      show = "all";
+      Array.prototype.forEach.call(buttons, function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-show") === "all" ? "true" : "false"); });
+    }
+    render();
+  });
+  document.querySelectorAll(".jump a").forEach(function (a) {
+    a.addEventListener("click", function () {
+      if (show !== "all") { show = "all"; Array.prototype.forEach.call(buttons, function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-show") === "all" ? "true" : "false"); }); render(); }
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>
