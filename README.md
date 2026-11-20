@@ -1,2 +1,2 @@
 # Visual-Bible
-O? and NT easy access
+OT and NT easy access
